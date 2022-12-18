@@ -189,7 +189,6 @@ void AccountListPage::on_actionAddMicrosoft_triggered()
 void AccountListPage::on_actionAddOffline_triggered()
 {
     if (!m_accounts->anyAccountIsValid()) {
-        QMessageBox::warning(
          this,
          tr("Please enter your desired username to add your offline account.");  
     }
