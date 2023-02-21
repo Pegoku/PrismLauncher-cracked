@@ -101,16 +101,17 @@ void LaunchController::decideAccount()
         )->exec();
 
         
-        if (reply == QMessageBox::Yes)
+        
+         if (reply == QMessageBox::No)
+        {
+            // Do not open "profile select" dialog.
+            return;
+        }
+        else if (reply == QMessageBox::Yes)
         {
             // Open the account manager.
             APPLICATION->ShowGlobalSettings(m_parentWidget, "accounts");
         }
-        else if (reply == QMessageBox::No)
-        {
-            // Do not open "profile select" dialog.
-            return;
-    }
 
     m_accountToUse = accounts->defaultAccount();
     if (!m_accountToUse)
