@@ -1,0 +1,384 @@
+!include "FileFunc.nsh"
+!include "LogicLib.nsh"
+!include "MUI2.nsh"
+
+Unicode true
+
+Name "@Launcher_DisplayName@"
+InstallDir "$LOCALAPPDATA\Programs\@Launcher_CommonName@"
+InstallDirRegKey HKCU "Software\@Launcher_CommonName@" "InstallDir"
+RequestExecutionLevel user
+OutFile "../@Launcher_CommonName@-Setup.exe"
+
+!define MUI_ICON "../@Launcher_Branding_ICO@"
+
+;--------------------------------
+
+; Pages
+
+!insertmacro MUI_PAGE_WELCOME
+!define MUI_COMPONENTSPAGE_NODESC
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$InstDir\@Launcher_APP_BINARY_NAME@.exe"
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+;--------------------------------
+
+; Languages
+
+!insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_LANGUAGE "Spanish"
+!insertmacro MUI_LANGUAGE "SpanishInternational"
+!insertmacro MUI_LANGUAGE "SimpChinese"
+!insertmacro MUI_LANGUAGE "TradChinese"
+!insertmacro MUI_LANGUAGE "Japanese"
+!insertmacro MUI_LANGUAGE "Korean"
+!insertmacro MUI_LANGUAGE "Italian"
+!insertmacro MUI_LANGUAGE "Dutch"
+!insertmacro MUI_LANGUAGE "Danish"
+!insertmacro MUI_LANGUAGE "Swedish"
+!insertmacro MUI_LANGUAGE "Norwegian"
+!insertmacro MUI_LANGUAGE "NorwegianNynorsk"
+!insertmacro MUI_LANGUAGE "Finnish"
+!insertmacro MUI_LANGUAGE "Greek"
+!insertmacro MUI_LANGUAGE "Russian"
+!insertmacro MUI_LANGUAGE "Portuguese"
+!insertmacro MUI_LANGUAGE "PortugueseBR"
+!insertmacro MUI_LANGUAGE "Polish"
+!insertmacro MUI_LANGUAGE "Ukrainian"
+!insertmacro MUI_LANGUAGE "Czech"
+!insertmacro MUI_LANGUAGE "Slovak"
+!insertmacro MUI_LANGUAGE "Croatian"
+!insertmacro MUI_LANGUAGE "Bulgarian"
+!insertmacro MUI_LANGUAGE "Hungarian"
+!insertmacro MUI_LANGUAGE "Thai"
+!insertmacro MUI_LANGUAGE "Romanian"
+!insertmacro MUI_LANGUAGE "Latvian"
+!insertmacro MUI_LANGUAGE "Macedonian"
+!insertmacro MUI_LANGUAGE "Estonian"
+!insertmacro MUI_LANGUAGE "Turkish"
+!insertmacro MUI_LANGUAGE "Lithuanian"
+!insertmacro MUI_LANGUAGE "Slovenian"
+!insertmacro MUI_LANGUAGE "Serbian"
+!insertmacro MUI_LANGUAGE "SerbianLatin"
+!insertmacro MUI_LANGUAGE "Arabic"
+!insertmacro MUI_LANGUAGE "Farsi"
+!insertmacro MUI_LANGUAGE "Hebrew"
+!insertmacro MUI_LANGUAGE "Indonesian"
+!insertmacro MUI_LANGUAGE "Mongolian"
+!insertmacro MUI_LANGUAGE "Luxembourgish"
+!insertmacro MUI_LANGUAGE "Albanian"
+!insertmacro MUI_LANGUAGE "Breton"
+!insertmacro MUI_LANGUAGE "Belarusian"
+!insertmacro MUI_LANGUAGE "Icelandic"
+!insertmacro MUI_LANGUAGE "Malay"
+!insertmacro MUI_LANGUAGE "Bosnian"
+!insertmacro MUI_LANGUAGE "Kurdish"
+!insertmacro MUI_LANGUAGE "Irish"
+!insertmacro MUI_LANGUAGE "Uzbek"
+!insertmacro MUI_LANGUAGE "Galician"
+!insertmacro MUI_LANGUAGE "Afrikaans"
+!insertmacro MUI_LANGUAGE "Catalan"
+!insertmacro MUI_LANGUAGE "Esperanto"
+!insertmacro MUI_LANGUAGE "Asturian"
+!insertmacro MUI_LANGUAGE "Basque"
+!insertmacro MUI_LANGUAGE "Pashto"
+!insertmacro MUI_LANGUAGE "ScotsGaelic"
+!insertmacro MUI_LANGUAGE "Georgian"
+!insertmacro MUI_LANGUAGE "Vietnamese"
+!insertmacro MUI_LANGUAGE "Welsh"
+!insertmacro MUI_LANGUAGE "Armenian"
+!insertmacro MUI_LANGUAGE "Corsican"
+!insertmacro MUI_LANGUAGE "Tatar"
+!insertmacro MUI_LANGUAGE "Hindi"
+
+;--------------------------------
+
+; Version info
+VIProductVersion "@Launcher_VERSION_NAME4@"
+VIFileVersion "@Launcher_VERSION_NAME4@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "@Launcher_DisplayName@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "@Launcher_DisplayName@ Installer"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "@Launcher_Copyright@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "@Launcher_VERSION_NAME4@"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "@Launcher_VERSION_NAME4@"
+
+
+;--------------------------------
+; Shell Associate Macros
+
+!macro APP_SETUP DESCRIPTION ICON APP_ID APP_NAME APP_EXE COMMANDTEXT COMMAND ; VERB APP_COMPANY
+  ; setup APP_ID
+  WriteRegStr ShCtx "Software\Classes\${APP_ID}" "" `${DESCRIPTION}`
+  WriteRegStr ShCtx "Software\Classes\${APP_ID}\DefaultIcon" "" `${ICON}`
+  ; default open verb
+  WriteRegStr ShCtx "Software\Classes\${APP_ID}\shell" "" "open"                  
+  WriteRegStr ShCtx "Software\Classes\${APP_ID}\shell\open" "" `${COMMANDTEXT}`
+  WriteRegStr ShCtx "Software\Classes\${APP_ID}\shell\open\command" "" `${COMMAND}`
+
+  ; if you want the app to use it's own implementation of a verb
+  ;WriteRegStr ShCtx "Software\Classes\${APP_ID}\shell\${VERB}" "" "${DESCRIPTION}"
+  ;WriteRegStr ShCtx "Software\Classes\${APP_ID}\shell\${VERB}\command" "" `${COMMAND}`
+
+  WriteRegStr ShCtx "Software\Classes\Applications\${APP_EXE}\shell\open\command" "" `${COMMAND}`
+  WriteRegStr ShCtx "Software\Classes\Applications\${APP_EXE}" "FriendlyAppName" `${APP_NAME}` ; [Optional]
+  ;WriteRegStr ShCtx "Software\Classes\Applications\${APP_EXE}" "ApplicationCompany" `${APP_COMPANY}` ; [Optional]
+  ;WriteRegNone ShCtx "Software\Classes\Applications\${APP_EXE}\SupportedTypes" ".${EXT}" ; [Optional] Only allow "Open With" with specific extension(s) on WinXP+
+
+  # Register "Default Programs" [Optional]
+  !ifdef REGISTER_DEFAULTPROGRAMS
+  WriteRegStr ShCtx "Software\Classes\Applications\${APP_EXE}\Capabilities" "ApplicationDescription" `${DESCRIPTION}`
+  WriteRegStr ShCtx "Software\RegisteredApplications" `${APP_NAME}` "Software\Classes\Applications\${APP_EXE}\Capabilities"
+  !endif
+
+!macroend
+
+!macro APP_ASSOCIATE EXT APP_ID APP_EXE OVERWIRTE
+  ; Backup the previously associated file class
+  ${If} ${OVERWIRTE} == true
+  ReadRegStr $R0 ShCtx "Software\Classes\${EXT}" ""
+  WriteRegStr ShCtx "Software\Classes\${EXT}" "${APP_ID}_backup" "$R0"
+  WriteRegStr ShCtx "Software\Classes\${EXT}" "" "${APP_ID}"
+  ${EndIf}
+
+  WriteRegNone ShCtx "Software\Classes\${EXT}\OpenWithList" "${APP_EXE}" ; Win2000+
+  WriteRegNone ShCtx "Software\Classes\${EXT}\OpenWithProgids" "${APP_ID}" ; WinXP+
+
+  # Register "Default Programs" [Optional]
+  !ifdef REGISTER_DEFAULTPROGRAMS
+  WriteRegStr ShCtx "Software\Classes\Applications\${APP_EXE}\Capabilities\FileAssociations" "${EXT}" "${APP_ID}"
+  !endif
+
+!macroend
+
+!macro APP_UNASSOCIATE EXT APP_ID
+
+  # Unregister file type
+  ClearErrors
+  ; restore backup
+  ReadRegStr $R1 ShCtx "Software\Classes\${EXT}" ""
+  ${If} $R1 == "${APP_ID}"
+    ReadRegStr $R0 ShCtx "Software\Classes\${EXT}" `${APP_ID}_backup`
+    WriteRegStr ShCtx "Software\Classes\${EXT}" "" "$R0"
+  ${Else}
+    ReadRegStr $R0 ShCtx "Software\Classes\${EXT}" ""
+  ${EndIf}
+
+  DeleteRegKey /IfEmpty ShCtx "Software\Classes\${APP_ID}"
+  ${IfNot} ${Errors}
+  ${AndIf} $R0 == "${APP_ID}"
+    DeleteRegValue ShCtx "Software\Classes\${EXT}" ""
+    DeleteRegKey /IfEmpty ShCtx "Software\Classes\${EXT}"
+  ${EndIf}
+
+  DeleteRegValue ShCtx "Software\Classes\${EXT}\OpenWithList" "${APP_EXE}"
+  DeleteRegKey /IfEmpty ShCtx "Software\Classes\${EXT}\OpenWithList"
+  DeleteRegValue ShCtx "Software\Classes\${EXT}\OpenWithProgids" "${APP_ID}"
+  DeleteRegKey /IfEmpty ShCtx "Software\Classes\${EXT}\OpenWithProgids"
+  DeleteRegKey /IfEmpty  ShCtx "Software\Classes\${EXT}"
+
+  # Attempt to clean up junk left behind by the Windows shell
+  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\ApplicationAssociationToasts" "${APP_ID}_${EXT}"
+  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\ApplicationAssociationToasts" "Applications\${APP_EXE}_${EXT}"
+  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\${EXT}\OpenWithProgids" "${APP_ID}"
+  DeleteRegKey /IfEmpty HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\${EXT}\OpenWithProgids"
+  DeleteRegKey /IfEmpty HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\${EXT}\OpenWithList"
+  DeleteRegKey /IfEmpty HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\${EXT}"
+  ;DeleteRegKey HKCU "Software\Microsoft\Windows\Roaming\OpenWith\FileExts\.${EXT}"
+  ;DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs\.${EXT}"
+
+!macroend
+
+!macro APP_TEARDOWN APP_ID APP_NAME APP_EXE
+
+  # Unregister file type
+  ClearErrors
+  DeleteRegKey /IfEmpty ShCtx "Software\Classes\${APP_ID}\shell"
+  ${IfNot} ${Errors}
+    DeleteRegKey ShCtx "Software\Classes\${APP_ID}\DefaultIcon"
+  ${EndIf}
+  
+  # Unregister "Open With"
+  DeleteRegKey ShCtx "Software\Classes\Applications\${APP_EXE}"
+
+  # Unregister "Default Programs"
+  !ifdef REGISTER_DEFAULTPROGRAMS
+  DeleteRegValue ShCtx "Software\RegisteredApplications" `${APP_NAME}`
+  DeleteRegKey ShCtx "Software\Classes\Applications\${APP_EXE}\Capabilities"
+  DeleteRegKey /IfEmpty ShCtx "Software\Classes\Applications\${APP_EXE}"
+  !endif
+
+  DeleteRegKey ShCtx `Software\Classes\${APP_ID}`
+  DeleteRegKey ShCtx "Software\Classes\Applications\${APP_EXE}"
+
+  # Attempt to clean up junk left behind by the Windows shell
+  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Search\JumplistData" "$INSTDIR\${APP_EXE}"
+  DeleteRegValue HKCU "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache" "$INSTDIR\${APP_EXE}.FriendlyAppName"
+  DeleteRegValue HKCU "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache" "$INSTDIR\${APP_EXE}.ApplicationCompany"
+  DeleteRegValue HKCU "Software\Microsoft\Windows\ShellNoRoam\MUICache" "$INSTDIR\${APP_EXE}" ; WinXP
+  DeleteRegValue HKCU "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store" "$INSTDIR\${APP_EXE}"
+
+!macroend
+
+; !defines for use with SHChangeNotify
+!ifdef SHCNE_ASSOCCHANGED
+!undef SHCNE_ASSOCCHANGED
+!endif
+!define SHCNE_ASSOCCHANGED 0x08000000
+!ifdef SHCNF_FLUSH
+!undef SHCNF_FLUSH
+!endif
+!define SHCNF_FLUSH        0x1000
+
+
+# ensure this is called at the end of any section that changes shell keys
+!macro NotifyShell_AssocChanged
+; Using the system.dll plugin to call the SHChangeNotify Win32 API function so we
+; can update the shell.
+  System::Call "shell32::SHChangeNotify(i,i,i,i) (${SHCNE_ASSOCCHANGED}, ${SHCNF_FLUSH}, 0, 0)"
+!macroend
+
+
+;--------------------------------
+
+; The stuff to install
+Section "@Launcher_DisplayName@"
+
+  SectionIn RO
+
+  nsExec::Exec /TIMEOUT=2000 'TaskKill /IM @Launcher_APP_BINARY_NAME@.exe /F'
+
+  SetOutPath $INSTDIR
+
+  File "@Launcher_APP_BINARY_NAME@.exe"
+  File "qt.conf"
+  File *.dll
+  File /r "iconengines"
+  File /r "imageformats"
+  File /r "jars"
+  File /r "platforms"
+  File /r "styles"
+  File /nonfatal /r "tls"
+
+  ; Write the installation path into the registry
+  WriteRegStr HKCU Software\@Launcher_CommonName@ "InstallDir" "$INSTDIR"
+
+  ; Write the uninstall keys for Windows
+  ${GetParameters} $R0
+  ${GetOptions} $R0 "/NoUninstaller" $R1
+  ${If} ${Errors}
+    !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\@Launcher_CommonName@"
+    WriteRegStr HKCU "${UNINST_KEY}" "DisplayName" "@Launcher_DisplayName@"
+    WriteRegStr HKCU "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\@Launcher_APP_BINARY_NAME@.exe"
+    WriteRegStr HKCU "${UNINST_KEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+    WriteRegStr HKCU "${UNINST_KEY}" "QuietUninstallString" '"$INSTDIR\uninstall.exe" /S'
+    WriteRegStr HKCU "${UNINST_KEY}" "InstallLocation" "$INSTDIR"
+    WriteRegStr HKCU "${UNINST_KEY}" "Publisher" "@Launcher_DisplayName@ Contributors"
+    WriteRegStr HKCU "${UNINST_KEY}" "Version" "@Launcher_VERSION_NAME4@"
+    WriteRegStr HKCU "${UNINST_KEY}" "DisplayVersion" "@Launcher_VERSION_NAME@"
+    WriteRegStr HKCU "${UNINST_KEY}" "VersionMajor" "@Launcher_VERSION_MAJOR@"
+    WriteRegStr HKCU "${UNINST_KEY}" "VersionMinor" "@Launcher_VERSION_MINOR@"
+    ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+    IntFmt $0 "0x%08X" $0
+    WriteRegDWORD HKCU "${UNINST_KEY}" "EstimatedSize" "$0"
+    WriteRegDWORD HKCU "${UNINST_KEY}" "NoModify" 1
+    WriteRegDWORD HKCU "${UNINST_KEY}" "NoRepair" 1
+    WriteUninstaller "$INSTDIR\uninstall.exe"
+  ${EndIf}
+
+SectionEnd
+
+Section "Start Menu Shortcut" SM_SHORTCUTS
+
+  CreateShortcut "$SMPROGRAMS\@Launcher_DisplayName@.lnk" "$INSTDIR\@Launcher_APP_BINARY_NAME@.exe" "" "$INSTDIR\@Launcher_APP_BINARY_NAME@.exe" 0
+
+SectionEnd
+
+Section /o "Desktop Shortcut" DESKTOP_SHORTCUTS
+
+  CreateShortcut "$DESKTOP\@Launcher_DisplayName@.lnk" "$INSTDIR\@Launcher_APP_BINARY_NAME@.exe" "" "$INSTDIR\@Launcher_APP_BINARY_NAME@.exe" 0
+
+SectionEnd
+
+
+!define APP_ID "@Launcher_CommonName@.App"
+!define APP_EXE "@Launcher_APP_BINARY_NAME@.exe"
+!define APP_ICON "$INSTDIR\${APP_EXE},0"
+!define APP_DESCRIPTION "@Launcher_DisplayName@"
+!define APP_NAME "@Launcher_DisplayName@"
+!define APP_CMD_TEXT "Minecraft Modpack"
+
+!define REGISTER_DEFAULTPROGRAMS ; value doesn't matter
+
+Section -ShellAssoc
+
+  !insertmacro APP_SETUP `${APP_DESCRIPTION}` `${APP_ICON}` `${APP_ID}` `${APP_CMD_TEXT}` `${APP_EXE}` `${APP_CMD_TEXT}` '$INSTDIR\${APP_EXE} -I "%1"'
+  
+  !insertmacro APP_ASSOCIATE ".zip" `${APP_ID}` `${APP_EXE}` false
+  !insertmacro APP_ASSOCIATE ".mrpack" `${APP_ID}` `${APP_EXE}` true
+
+  !insertmacro NotifyShell_AssocChanged
+SectionEnd
+
+
+;--------------------------------
+
+; Uninstaller
+
+Section "Uninstall"
+
+  nsExec::Exec /TIMEOUT=2000 'TaskKill /IM @Launcher_APP_BINARY_NAME@.exe /F'
+
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\@Launcher_CommonName@"
+  DeleteRegKey HKCU SOFTWARE\@Launcher_CommonName@
+
+  Delete $INSTDIR\@Launcher_APP_BINARY_NAME@.exe
+  Delete $INSTDIR\qt.conf
+  Delete $INSTDIR\*.dll
+
+  Delete $INSTDIR\uninstall.exe
+
+  RMDir /r $INSTDIR\iconengines
+  RMDir /r $INSTDIR\imageformats
+  RMDir /r $INSTDIR\jars
+  RMDir /r $INSTDIR\platforms
+  RMDir /r $INSTDIR\styles
+  RMDir /r $INSTDIR\tls
+
+  Delete "$SMPROGRAMS\@Launcher_DisplayName@.lnk"
+  Delete "$DESKTOP\@Launcher_DisplayName@.lnk"
+
+  RMDir "$INSTDIR"
+
+SectionEnd
+
+Section -un.ShellAssoc
+  
+  !insertmacro APP_TEARDOWN `${APP_ID}` `${APP_NAME}` `${APP_EXE}`
+
+  !insertmacro APP_UNASSOCIATE ".zip" `${APP_ID}`
+  !insertmacro APP_UNASSOCIATE ".mrpack" `${APP_ID}`
+
+  !insertmacro NotifyShell_AssocChanged
+SectionEnd
+
+;--------------------------------
+
+; Extra command line parameters
+
+Function .onInit
+${GetParameters} $R0
+${GetOptions} $R0 "/NoShortcuts" $R1
+${IfNot} ${Errors}
+${OrIf} ${FileExists} "$InstDir\@Launcher_APP_BINARY_NAME@.exe"
+  !insertmacro UnselectSection ${SM_SHORTCUTS}
+  !insertmacro UnselectSection ${DESKTOP_SHORTCUTS}
+${EndIf}
+FunctionEnd
