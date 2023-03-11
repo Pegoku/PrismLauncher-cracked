@@ -204,10 +204,10 @@ set(MINECRAFT_SOURCES
 
     minecraft/auth/flows/AuthFlow.cpp
     minecraft/auth/flows/AuthFlow.h
-    # minecraft/auth/flows/Mojang.cpp
-    # minecraft/auth/flows/Mojang.h
-    # minecraft/auth/flows/MSA.cpp
-    # minecraft/auth/flows/MSA.h
+    minecraft/auth/flows/Mojang.cpp
+    minecraft/auth/flows/Mojang.h
+    minecraft/auth/flows/MSA.cpp
+    minecraft/auth/flows/MSA.h
     minecraft/auth/flows/Offline.cpp
     minecraft/auth/flows/Offline.h
 
