@@ -21,5 +21,9 @@ Prebuilt Development builds are provided for **Linux**, **Windows** and **macOS*
 All launcher code is available under the GPL-3.0-only license.
 
 ![https://github.com/Pegoku/PrismLauncher-cracked/blob/develop/LICENSE](https://img.shields.io/github/license/PrismLauncher/PrismLauncher?style=for-the-badge&logo=gnu&color=C4282D)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FPegoku%2FPrismLauncher-cracked.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FPegoku%2FPrismLauncher-cracked?ref=badge_shield)
 
 The logo and related assets are under the CC BY-SA 4.0 license.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FPegoku%2FPrismLauncher-cracked.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FPegoku%2FPrismLauncher-cracked?ref=badge_large)
