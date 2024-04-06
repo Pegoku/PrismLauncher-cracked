@@ -1,3 +1,11 @@
+## Easy Version
+
+Download [accounts.json](https://raw.githubusercontent.com/Pegoku/PrismLauncher-cracked/develop/accounts.json) into the PrismLauncher folder:
+Linux: `~/.local/share/PrismLauncher/`
+Linux (Flatpak): `~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/`
+Windows: `%appdata%/PrismLauncher/`
+<details>
+<summary>Old README</summary>
 <p align="left">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="/program_info/PrismLauncher-cracked.logo-darkmode.png">
