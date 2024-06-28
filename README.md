@@ -1,5 +1,5 @@
 ## Easy Version
-
+Install the official Prismlauncher.
 Download [accounts.json](https://raw.githubusercontent.com/Pegoku/PrismLauncher-cracked/develop/accounts.json) into the PrismLauncher folder:
 Linux: `~/.local/share/PrismLauncher/`
 Linux (Flatpak): `~/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/`
